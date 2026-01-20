@@ -55,7 +55,7 @@ class Nios2(object):
     def get_reg(self, reg):
         return pynios2.py_get_reg(self.c_obj, reg)
     def set_reg(self, reg, val):
-        pynios2.py_set_reg(self.c_obj, reg, val)
+        pynios2.py_set_reg(self.c_obj, reg, val & 0xffffffff)
 
     def get_ctl_reg(self, reg):
         return pynios2.py_get_ctl_reg(self.c_obj, reg)
