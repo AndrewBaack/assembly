@@ -1,0 +1,72 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test switches/LEDs
+      id: test-switches-leds
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test switches/LEDs
+        setup-command: pip install -r .test/requirements.txt
+        command: cd .test && python3 sw-led.py < ../sw-led.s
+        input: ''
+        expected-output: Passed all tests
+        comparison-method: exact
+        timeout: 1
+        max-score: 10
+    - name: Test sum integers
+      id: test-sum-integers
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test sum integers
+        setup-command: pip install -r .test/requirements.txt
+        command: cd .test && python3 sum-n.py < ../sum-n.s
+        input: ''
+        expected-output: Passed all tests
+        comparison-method: exact
+        timeout: 1
+        max-score: 10
+    - name: Test if else
+      id: test-if-else
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Test if else
+        setup-command: pip install -r .test/requirements.txt
+        command: cd .test && python3 if_else.py < ../if-else.s
+        input: ''
+        expected-output: Passed all tests
+        comparison-method: exact
+        timeout: 1
+        max-score: 10
+    - name: Check writeup
+      id: check-writeup
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Check writeup
+        setup-command:
+        command: cd .test && python3 check-writeup.py < ../writeup.txt
+        input: ''
+        expected-output: Passed all tests
+        comparison-method: exact
+        timeout: 1
+        max-score: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-SWITCHES-LEDS_RESULTS: "${{steps.test-switches-leds.outputs.result}}"
+        TEST-SUM-INTEGERS_RESULTS: "${{steps.test-sum-integers.outputs.result}}"
+        TEST-IF-ELSE_RESULTS: "${{steps.test-if-else.outputs.result}}"
+        CHECK-WRITEUP_RESULTS: "${{steps.check-writeup.outputs.result}}"
+      with:
+        runners: test-switches-leds,test-sum-integers,test-if-else,check-writeup
