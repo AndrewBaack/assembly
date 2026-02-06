@@ -7,10 +7,13 @@ _start:
     movia   r3, SW_ADDR
 
 loop:
-    ldwio   r4, 0(r3)
+    andi r5, r4, 0x1F     #r5 = B
     
-    # Your code here
+    srli r6, r4, 5        #shift right 5 bits
+    andi r6, r6, 0x1F     #r6 = A
 
-    stwio   r4, 0(r2)
+    add r4, r6, r5        #r4 = A + B
+
+    stwio r4, (r2)
     br      loop
 
