@@ -8,8 +8,7 @@ _start:
 
 loop:
     ldwio   r4, 0(r3)
-    
-    # Your code here
+   
 
     stwio   r4, 0(r2)
     br      loop
