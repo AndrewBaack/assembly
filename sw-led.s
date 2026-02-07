@@ -17,3 +17,5 @@ loop:
     stwio r4, (r2)
     br      loop
 
+    stop: break
+
