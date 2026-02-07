@@ -1,19 +1,23 @@
 .text
 _start:
     
-    mov     r2, r4
+    movi     r2, 0
 
-    bgt     r5, r2, r5_is_bigger
-    br      check_r6
+bge r5, r4, r5_Larger
+br r4_Larger  
 
-r5_is_bigger:
-    mov     r2, r5
+r5_Larger:
+    bge r6, r5, r6_Larger
+    mov r2, r5 
+    br stop
 
-check_r6:
-    bgt     r6, r2, r6_is_bigger
-    br      done
+r6_Larger:
+    mov r2, r6 
+    br stop
 
-r6_is_bigger:
-    mov     r2, r6
+r4_Larger:
+    bge r6, r4, r6_Larger 
+    mov r2, r4 
+    br stop
 
-done:
+stop: break
