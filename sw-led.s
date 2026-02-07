@@ -1,21 +1,21 @@
-.text
-    .equ    LED_ADDR,   0xFF200000
-    .equ    SW_ADDR,    0xFF200040
+    .text
+    .equ LEDs, 0xFF200000
+    .equ SWITCHES, 0xFF200040
     .global _start
+    
 _start:
-    movia   r2, LED_ADDR
-    movia   r3, SW_ADDR
+    movia r2, LEDs         # Address of LEDs
+    movia r3, SWITCHES     # Address of switches
 
 loop:
-    andi r5, r4, 0x1F     #r5 = B
-    
-    srli r6, r4, 5        #shift right 5 bits
-    andi r6, r6, 0x1F     #r6 = A
+    ldwio r4, 0(r3)        # Read the state of switches
 
-    add r4, r6, r5        #r4 = A + B
+    andi r5, r4, 0x1F
+    srli r6, r4, 5
+    andi r6, r6, 0x1F
 
-    stwio r4, (r2)
-    br      loop
+    add r4, r6, r5
 
-    stop: break
+    stwio r4, 0(r2)        # Display the state on LEDs
 
+    br loop       
